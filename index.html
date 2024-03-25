@@ -20,6 +20,11 @@
                 "inch": { "km": 0.0000254, "m": 0.0254, "cm": 2.54, "mm": 25.4, "mile": 0.0000157828, "foot": 0.0833333, "inch": 1 }
             };
 
+            if (!value) {
+                document.getElementById("result").textContent = "Please enter a value.";
+                return;
+            }
+
             // Convert the value from the input unit to the output unit
             var result = value * factors[inputUnit][outputUnit];
 
@@ -33,8 +38,8 @@
 <h2>Length Unit Converter</h2>
 
 <div>
-    <input type="number" id="value" placeholder="Enter value">
-    <select id="inputUnit">
+    <input type="number" id="value" placeholder="Enter value" oninput="convertUnits()">
+    <select id="inputUnit" onchange="convertUnits()">
         <option value="km">Kilometers</option>
         <option value="m">Meters</option>
         <option value="cm">Centimeters</option>
@@ -44,7 +49,7 @@
         <option value="inch">Inches</option>
     </select>
     to
-    <select id="outputUnit">
+    <select id="outputUnit" onchange="convertUnits()">
         <option value="km">Kilometers</option>
         <option value="m">Meters</option>
         <option value="cm">Centimeters</option>
@@ -53,7 +58,6 @@
         <option value="foot">Feet</option>
         <option value="inch">Inches</option>
     </select>
-    <button onclick="convertUnits()">Convert</button>
 </div>
 
 <div>
