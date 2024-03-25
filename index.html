@@ -6,7 +6,8 @@
         function convertUnits() {
             // Get the value and the unit
             var value = document.getElementById("value").value;
-            var unit = document.getElementById("unit").value;
+            var inputUnit = document.getElementById("inputUnit").value;
+            var outputUnit = document.getElementById("outputUnit").value;
 
             // Conversion factors
             var factors = {
@@ -19,16 +20,11 @@
                 "inch": { "km": 0.0000254, "m": 0.0254, "cm": 2.54, "mm": 25.4, "mile": 0.0000157828, "foot": 0.0833333, "inch": 1 }
             };
 
-            // Convert the value to all other units
-            var results = {};
-            for (var targetUnit in factors[unit]) {
-                results[targetUnit] = value * factors[unit][targetUnit];
-            }
+            // Convert the value from the input unit to the output unit
+            var result = value * factors[inputUnit][outputUnit];
 
-            // Display the results
-            for (var targetUnit in results) {
-                document.getElementById("result_" + targetUnit).textContent = results[targetUnit].toFixed(3);
-            }
+            // Display the result
+            document.getElementById("result").textContent = result.toFixed(3) + " " + outputUnit;
         }
     </script>
 </head>
@@ -38,7 +34,17 @@
 
 <div>
     <input type="number" id="value" placeholder="Enter value">
-    <select id="unit">
+    <select id="inputUnit">
+        <option value="km">Kilometers</option>
+        <option value="m">Meters</option>
+        <option value="cm">Centimeters</option>
+        <option value="mm">Millimeters</option>
+        <option value="mile">Miles</option>
+        <option value="foot">Feet</option>
+        <option value="inch">Inches</option>
+    </select>
+    to
+    <select id="outputUnit">
         <option value="km">Kilometers</option>
         <option value="m">Meters</option>
         <option value="cm">Centimeters</option>
@@ -51,13 +57,7 @@
 </div>
 
 <div>
-    <p>Kilometers: <span id="result_km"></span></p>
-    <p>Meters: <span id="result_m"></span></p>
-    <p>Centimeters: <span id="result_cm"></span></p>
-    <p>Millimeters: <span id="result_mm"></span></p>
-    <p>Miles: <span id="result_mile"></span></p>
-    <p>Feet: <span id="result_foot"></span></p>
-    <p>Inches: <span id="result_inch"></span></p>
+    <p>Result: <span id="result"></span></p>
 </div>
 
 </body>
