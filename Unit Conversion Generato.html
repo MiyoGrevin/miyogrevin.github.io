@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>More Practice Unit Conversion</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById("spinButton").addEventListener("click", spinWheel);
+        });
+
+        function generateRandomNumber() {
+            // Generate a random number to decide on the type of output (integer or decimal)
+            const typeDecider = Math.random();
+            let randomNumber;
+
+            // 80% chance to generate an integer
+            if (typeDecider < 0.8) {
+                randomNumber = Math.floor(Math.random() * (100 - 1) + 1); // 1 to 99
+            } else { // 20% chance to generate a decimal number
+                randomNumber = (Math.random() * (99.99 - 0.01) + 0.01).toFixed(2);
+            }
+
+            return randomNumber;
+        }
+
+        function spinWheel() {
+            // Generate a random number with specified criteria
+            const randomNumber = generateRandomNumber();
+
+            // Define the units
+            const units = {
+                "length": ["km", "m", "cm", "mm"],
+                "mass": ["kg", "g", "mg"],
+                "capacity": ["kL", "L", "mL"]
+            };
+
+            // Pick a random category
+            const categories = Object.keys(units);
+            const category = categories[Math.floor(Math.random() * categories.length)];
+
+            // Pick a random unit from the chosen category
+            const firstUnitIndex = Math.floor(Math.random() * units[category].length);
+            const firstUnit = units[category][firstUnitIndex];
+
+            // Remove the first unit from the array and pick the second unit
+            units[category].splice(firstUnitIndex, 1);
+            const secondUnit = units[category][Math.floor(Math.random() * units[category].length)];
+
+            // Display the results
+            document.getElementById("result").innerHTML = 
+                "Convert: " + randomNumber + " " + firstUnit + "<br>to: " + secondUnit;
+        }
+    </script>
+</head>
+<body>
+
+<h2>Random Conversion Generator</h2>
+<button id="spinButton">Generate</button>
+
+<div id="result"></div>
+
+</body>
+</html>
