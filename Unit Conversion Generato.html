@@ -2,62 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>More Practice Unit Conversion</title>
+    <title>Conversion Practice</title>
     <script>
+        let firstUnit, secondUnit, randomNumber;
+
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("spinButton").addEventListener("click", spinWheel);
+            document.getElementById("checkButton").addEventListener("click", checkConversion);
         });
 
         function generateRandomNumber() {
-            // Generate a random number to decide on the type of output (integer or decimal)
             const typeDecider = Math.random();
-            let randomNumber;
-
-            // 80% chance to generate an integer
-            if (typeDecider < 0.8) {
-                randomNumber = Math.floor(Math.random() * (100 - 1) + 1); // 1 to 99
-            } else { // 20% chance to generate a decimal number
-                randomNumber = (Math.random() * (99.99 - 0.01) + 0.01).toFixed(2);
-            }
-
-            return randomNumber;
+            return typeDecider < 0.8 ? Math.floor(Math.random() * 99) + 1 : (Math.random() * 99.99 + 0.01).toFixed(2);
         }
 
         function spinWheel() {
-            // Generate a random number with specified criteria
-            const randomNumber = generateRandomNumber();
-
-            // Define the units
             const units = {
                 "length": ["km", "m", "cm", "mm"],
                 "mass": ["kg", "g", "mg"],
                 "capacity": ["kL", "L", "mL"]
             };
-
-            // Pick a random category
             const categories = Object.keys(units);
             const category = categories[Math.floor(Math.random() * categories.length)];
+            const unitOptions = [...units[category]];
 
-            // Pick a random unit from the chosen category
-            const firstUnitIndex = Math.floor(Math.random() * units[category].length);
-            const firstUnit = units[category][firstUnitIndex];
+            randomNumber = generateRandomNumber();
+            firstUnit = unitOptions.splice(Math.floor(Math.random() * unitOptions.length), 1)[0];
+            secondUnit = unitOptions[Math.floor(Math.random() * unitOptions.length)];
 
-            // Remove the first unit from the array and pick the second unit
-            units[category].splice(firstUnitIndex, 1);
-            const secondUnit = units[category][Math.floor(Math.random() * units[category].length)];
+            document.getElementById("result").innerHTML = `Convert: ${randomNumber} ${firstUnit} to ${secondUnit}`;
+            document.getElementById("userResult").value = ''; // Clear previous input
+            document.getElementById("feedback").textContent = ''; // Clear previous feedback
+        }
 
-            // Display the results
-            document.getElementById("result").innerHTML = 
-                "Convert: " + randomNumber + " " + firstUnit + "<br>to: " + secondUnit;
+        function calculateConversion(value, fromUnit, toUnit) {
+            const conversionRates = {
+                "length": {"km": 1000, "m": 1, "cm": 0.01, "mm": 0.001},
+                "mass": {"kg": 1000, "g": 1, "mg": 0.001},
+                "capacity": {"kL": 1000, "L": 1, "mL": 0.001}
+            };
+
+            let baseUnitValue;
+            // Determine the category for conversion based on the units provided.
+            const category = Object.keys(conversionRates).find(cat => conversionRates[cat][fromUnit]);
+            
+            baseUnitValue = value * conversionRates[category][fromUnit]; // Convert to base unit
+            return baseUnitValue / conversionRates[category][toUnit]; // Convert to target unit
+        }
+
+        function checkConversion() {
+            const userResult = parseFloat(document.getElementById("userResult").value);
+            const correctResult = calculateConversion(randomNumber, firstUnit, secondUnit);
+
+            if (Math.abs(userResult - correctResult) < 0.000000001) {
+                document.getElementById("feedback").textContent = "Correct!";
+            } else {
+              document.getElementById("feedback").textContent = "Incorrect. The correct answer is " + parseFloat(correctResult.toFixed(8));
+            }
         }
     </script>
 </head>
 <body>
 
-<h2>Random Conversion Generator</h2>
-<button id="spinButton">Generate</button>
-
+<h2>Conversion Practice</h2>
+<button id="spinButton">Generate Conversion</button>
 <div id="result"></div>
+
+<div>
+    <label for="userResult">Your Result:</label>
+    <input type="number" step="any" id="userResult">
+    <button id="checkButton">Check Conversion</button>
+</div>
+
+<div id="feedback"></div>
 
 </body>
 </html>
